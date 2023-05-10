@@ -1,5 +1,6 @@
 from google.cloud import aiplatform
 
+job_name = 'test'
 project_id = 'hai-gcp-model-medical'
 location = 'us-central1'
 bucket_name = 'medfm_job'
@@ -8,7 +9,7 @@ args = [
     "--dataset_name", "wikitext",
     "--dataset_config_name", "wikitext-2-raw-v1",
     "--model_name_or_path", "gpt2",
-    "--output_dir", "gs://medfm_data/output",
+    "--output_dir", f"/gcs/medfm_job/${job_name}/output",
 ]
 
 
@@ -52,7 +53,7 @@ worker_pool_specs =  [{
 aiplatform.init(project=project_id, location=location)
 
 job = aiplatform.CustomJob(
-    display_name='my-custom-job',
+    display_name=job_name,
     worker_pool_specs=worker_pool_specs,
     staging_bucket=bucket_name,
 )

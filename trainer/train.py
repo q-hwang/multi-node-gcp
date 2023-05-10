@@ -72,31 +72,44 @@ MODEL_CONFIG_CLASSES = list(MODEL_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
 
 
+import torch
+
+torch.distributed.init_process_group(
+    backend='nccl',
+    init_method='env://'
+)
+
 
 def setup_accelerate():
-    cluster_spec_str = os.environ.get('CLUSTER_SPEC')
-    cluster_spec = json.loads(cluster_spec_str)
+    # cluster_spec_str = os.environ.get('CLUSTER_SPEC')
+    # cluster_spec = json.loads(cluster_spec_str)
 
-    # Convert back to string just for pretty printing
-    logger.info(json.dumps(cluster_spec, indent=2))
-    logger.info("cluster_spec", cluster_spec)
+    # # Convert back to string just for pretty printing
+    # logger.info(json.dumps(cluster_spec, indent=2))
+    # logger.info("cluster_spec", cluster_spec)
     logger.info("package_directory", package_directory)
     logger.info("os.listdir(package_directory)", os.listdir(package_directory))
 
+    with open('/gcs/medfm_job/epoch3.log', 'a') as f:
+        f.write('success!\n')
+    logger.info("master_addr", os.environ["MASTER_ADDR"])  
+    logger.info("master_port", os.environ["MASTER_PORT"])
+    logger.info("RANK", os.environ["RANK"])
+    logger.info("WORLD_SIZE", os.environ["WORLD_SIZE"])
 
     parser = launch_command_parser()
     args = parser.parse_args(["--config_file", os.path.join(package_directory,"env.yaml"), "train.py"])
     args, defaults, mp_from_config_flag = _validate_launch_command(args)
 
-    ## not sure
-    if cluster_spec["task"]["type"] == "workerpool0":
-        args.machine_rank = 0
-    else:
-        args.machine_rank = cluster_spec["task"]["index"] + 1
-    args.main_process_ip, args.main_process_port = cluster_spec["cluster"]["workerpool0"][0].split(":")
-    logger.info("args.main_process_ip", args.main_process_ip)
-    logger.info("args.main_process_port", args.main_process_port)
-    print("args.machine_rank", args.machine_rank)
+    # ## not sure
+    # if cluster_spec["task"]["type"] == "workerpool0":
+    #     args.machine_rank = os.environ.get("OMPI_COMM_WORLD_RANK", 0)
+    # else:
+    #     args.machine_rank = cluster_spec["task"]["index"] + 1
+    # args.main_process_ip, args.main_process_port = cluster_spec["cluster"]["workerpool0"][0].split(":")
+    # logger.info("args.main_process_ip", args.main_process_ip)
+    # logger.info("args.main_process_port", args.main_process_port)
+    # print("args.machine_rank", args.machine_rank)
 
     if args.use_deepspeed and not args.cpu:
         args.deepspeed_fields_from_accelerate_config = list(defaults.deepspeed_config.keys()) if defaults else []
@@ -110,6 +123,7 @@ def setup_accelerate():
         current_env = prepare_multi_gpu_env(args)
     elif args.multi_gpu and not args.cpu:
         current_env = prepare_multi_gpu_env(args)
+    print("current_env", current_env)
     return current_env
 
 
@@ -165,7 +179,7 @@ def parse_args():
     parser.add_argument(
         "--per_device_train_batch_size",
         type=int,
-        default=8,
+        default=1,
         help="Batch size (per device) for the training dataloader.",
     )
     parser.add_argument(

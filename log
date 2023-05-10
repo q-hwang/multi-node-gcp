@@ -1,0 +1,42 @@
+message: "The replica workerpool0-0 exited with a non-zero status of 1. Termination reason: Error. \nTraceback (
+most recent call last):\n  File \"/opt/conda/lib/python3.7/runpy.py\", line 193, in _run_module_as_main\n    \"_
+_main__\", mod_spec)\n  File \"/opt/conda/lib/python3.7/runpy.py\", line 85, in _run_code\n    exec(code, run_gl
+obals)\n  File \"/root/.local/lib/python3.7/site-packages/trainer/train.py\", line 737, in <module>\n    main()\
+n  File \"/root/.local/lib/python3.7/site-packages/trainer/train.py\", line 300, in main\n    train(args)\n  Fil
+e \"/root/.local/lib/python3.7/site-packages/trainer/train.py\", line 563, in train\n    model, optimizer, train
+_dataloader, eval_dataloader, lr_scheduler\n  File \"/root/.local/lib/python3.7/site-packages/accelerate/acceler
+ator.py\", line 1144, in prepare\n    self._prepare_one(obj, first_pass=True, device_placement=d) for obj, d in 
+zip(args, device_placement)\n  File \"/root/.local/lib/python3.7/site-packages/accelerate/accelerator.py\", line
+ 1144, in <genexpr>\n    self._prepare_one(obj, first_pass=True, device_placement=d) for obj, d in zip(args, dev
+ice_placement)\n  File \"/root/.local/lib/python3.7/site-packages/accelerate/accelerator.py\", line 995, in _pre
+pare_one\n    return self.prepare_model(obj, device_placement=device_placement)\n  File \"/root/.local/lib/pytho
+n3.7/site-packages/accelerate/accelerator.py\", line 1252, in prepare_model\n    model = torch.nn.parallel.Distr
+ibutedDataParallel(model, **kwargs)\n  File \"/opt/conda/lib/python3.7/site-packages/torch/nn/parallel/distribut
+ed.py\", line 410, in __init__\n    self._sync_params_and_buffers(authoritative_rank=0)\n  File \"/opt/conda/lib
+/python3.7/site-packages/torch/nn/parallel/distributed.py\", line 420, in _sync_params_and_buffers\n    authorit
+ative_rank)\n  File \"/opt/conda/lib/python3.7/site-packages/torch/nn/parallel/distributed.py\", line 979, in _d
+istributed_broadcast_coalesced\n    self.process_group, tensors, buffer_size, authoritative_rank\nRuntimeError: 
+Invalid scalar type\n\nThe replica workerpool1-0 exited with a non-zero status of 1. Termination reason: Error. 
+\nTraceback (most recent call last):\n  File \"/opt/conda/lib/python3.7/runpy.py\", line 193, in _run_module_as_
+main\n    \"__main__\", mod_spec)\n  File \"/opt/conda/lib/python3.7/runpy.py\", line 85, in _run_code\n    exec
+(code, run_globals)\n  File \"/root/.local/lib/python3.7/site-packages/trainer/train.py\", line 737, in <module>
+\n    main()\n  File \"/root/.local/lib/python3.7/site-packages/trainer/train.py\", line 300, in main\n    train
+(args)\n  File \"/root/.local/lib/python3.7/site-packages/trainer/train.py\", line 563, in train\n    model, opt
+imizer, train_dataloader, eval_dataloader, lr_scheduler\n  File \"/root/.local/lib/python3.7/site-packages/accel
+erate/accelerator.py\", line 1144, in prepare\n    self._prepare_one(obj, first_pass=True, device_placement=d) f
+or obj, d in zip(args, device_placement)\n  File \"/root/.local/lib/python3.7/site-packages/accelerate/accelerat
+or.py\", line 1144, in <genexpr>\n    self._prepare_one(obj, first_pass=True, device_placement=d) for obj, d in 
+zip(args, device_placement)\n  File \"/root/.local/lib/python3.7/site-packages/accelerate/accelerator.py\", line
+ 995, in _prepare_one\n    return self.prepare_model(obj, device_placement=device_placement)\n  File \"/root/.lo
+cal/lib/python3.7/site-packages/accelerate/accelerator.py\", line 1252, in prepare_model\n    model = torch.nn.p
+arallel.DistributedDataParallel(model, **kwargs)\n  File \"/opt/conda/lib/python3.7/site-packages/torch/nn/paral
+lel/distributed.py\", line 410, in __init__\n    self._sync_params_and_buffers(authoritative_rank=0)\n  File \"/y-23
+opt/conda/lib/python3.7/site-packages/torch/nn/parallel/distributed.py\", line 420, in _sync_params_and_buffers\
+n    authoritative_rank)\n  File \"/opt/conda/lib/python3.7/site-packages/torch/nn/parallel/distributed.py\", li
+ne 979, in _distributed_broadcast_coalesced\n    self.process_group, tensors, buffer_size, authoritative_rank\nR
+untimeError: Invalid scalar type
+
+
+\n\nTo find out more about why your job exited please check the logs: https://co
+nsole.cloud.google.com/logs/viewer?project=284093641578&resource=ml_job%2Fjob_id%2F9035785869868400640&advancedF
+ilter=resource.type%3D%22ml_job%22%0Aresource.labels.job_id%3D%229035785869868400640%22"

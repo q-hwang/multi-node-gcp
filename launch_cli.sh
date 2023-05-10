@@ -8,11 +8,20 @@ REGION="us-central1"
 # submit training job to Vertex Training with 
 # pre-built container using gcloud CLI
 # gcloud beta ai custom-jobs create \
-gcloud ai custom-jobs create \
-    --display-name=${JOB_NAME} \
-    --region ${REGION} \
-    --worker-pool-spec=replica-count=1,machine-type='n1-standard-4',accelerator-type='NVIDIA_TESLA_T4',accelerator-count=2,executor-image-uri=us-docker.pkg.dev/vertex-ai/training/pytorch-gpu.1-7:latest,script='train.sh',local-package-path="trainer/"\
-    --worker-pool-spec=replica-count=1,machine-type='n1-standard-4',accelerator-type='NVIDIA_TESLA_T4',accelerator-count=2
+
+
+
+gcloud ai custom-jobs local-run \
+  --executor-image-uri=us-docker.pkg.dev/vertex-ai/training/pytorch-gpu.1-7:latest \
+  --local-package-path=../package \
+  --script=train.sh 
+
+# gcloud ai custom-jobs create \
+#     --project=hai-gcp-model-medical \
+#     --display-name=${JOB_NAME} \
+#     --region ${REGION} \
+#     --worker-pool-spec=replica-count=1,machine-type='n1-standard-4',accelerator-type='NVIDIA_TESLA_T4',accelerator-count=2,executor-image-uri=us-docker.pkg.dev/vertex-ai/training/pytorch-gpu.1-7:latest,script='train.sh',local-package-path="trainer/"\
+#     --worker-pool-spec=replica-count=1,machine-type='n1-standard-4',accelerator-type='NVIDIA_TESLA_T4',accelerator-count=2
 
 
 
